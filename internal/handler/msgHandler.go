@@ -71,7 +71,7 @@ func (m *MsgHandler) StartCommunication() {
 				m.Connection.ErrCh <- err
 				return
 			}
-			log.Println("Read: ", msg)
+			fmt.Println("Read: ", msg)
 
 			msgType := msg.MessageType
 			m.student.Seed = msg.Seed
@@ -86,7 +86,7 @@ func (m *MsgHandler) StartCommunication() {
 				m.student.DeltInt()
 				response := m.student.Lambda()
 				latestSendMsg = m.BuildResEventMsg(response, msg)
-				log.Println("Send: ", latestSendMsg)
+				fmt.Println("Send: ", latestSendMsg)
 				m.Connection.Stream.Send(latestSendMsg)
 
 			case pb.MessageType_MESSAGE_TYPE_EVENT_DISPATCH:
@@ -98,7 +98,7 @@ func (m *MsgHandler) StartCommunication() {
 				m.student.CurrentState.AddInfluenceFromState(msg.Content, result)
 
 			case pb.MessageType_MESSAGE_TYPE_ERROR_PHASE:
-				log.Println("Retry Send: ", latestSendMsg)
+				fmt.Println("Retry Send: ", latestSendMsg)
 				m.Connection.Stream.Send(latestSendMsg)
 			}
 		}
